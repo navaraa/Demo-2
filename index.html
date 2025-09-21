@@ -43,8 +43,9 @@
     ];
 
     let provider, signer, contract, userAddress;
+    
     /***********Desktop+Mobile wallet connect ******/
-    async function connectWallet() {
+  /*  async function connectWallet() {
   if (window.ethereum) {
     // ✅ MetaMask (Desktop + Mobile)
     provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -67,6 +68,71 @@
 
   loadInfo();
 }
+
+  */
+    /************ just check auto redirect network Polygon ********/
+
+async function connectWallet() {
+  if (window.ethereum) {
+    // ✅ MetaMask (Desktop + Mobile)
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+
+    // 🔍 Network check & auto switch
+    const network = await provider.getNetwork();
+    if (network.chainId !== 137) {
+      try {
+        // Pehle switch try karo
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x89' }], // 137 in hex
+        });
+      } catch (switchError) {
+        // Agar Polygon add nahi hai to add kar do
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: '0x89',
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+                rpcUrls: ['https://polygon-rpc.com/'],
+                blockExplorerUrls: ['https://polygonscan.com/'],
+              }],
+            });
+          } catch (addError) {
+            alert("⚠️ Please add Polygon Network manually in your wallet.");
+            return;
+          }
+        } else {
+          alert("⚠️ Please switch to Polygon Network manually.");
+          return;
+        }
+      }
+    }
+
+  } else {
+    // ✅ Trust Wallet / Others via WalletConnect
+    const wcProvider = new WalletConnectProvider.default({
+      rpc: {
+        137: "https://polygon-rpc.com"   // ⚠️ Polygon RPC
+      },
+    });
+    await wcProvider.enable();
+    provider = new ethers.providers.Web3Provider(wcProvider);
+  }
+
+  signer = provider.getSigner();
+  userAddress = await signer.getAddress();
+  document.getElementById("wallet").innerText = userAddress;
+  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+  loadInfo();
+}
+    
+
+    
 
 /*****************************************************/
 
