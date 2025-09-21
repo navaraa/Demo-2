@@ -78,49 +78,29 @@ async function connectWallet() {
     provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
 
-    // 🔍 Network check & auto switch
+    // 🔍 Network check (Polygon only)
     const network = await provider.getNetwork();
     if (network.chainId !== 137) {
-      try {
-        // Pehle switch try karo
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x89' }], // 137 in hex
-        });
-      } catch (switchError) {
-        // Agar Polygon add nahi hai to add kar do
-        if (switchError.code === 4902) {
-          try {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [{
-                chainId: '0x89',
-                chainName: 'Polygon Mainnet',
-                nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
-                rpcUrls: ['https://polygon-rpc.com/'],
-                blockExplorerUrls: ['https://polygonscan.com/'],
-              }],
-            });
-          } catch (addError) {
-            alert("⚠️ Please add Polygon Network manually in your wallet.");
-            return;
-          }
-        } else {
-          alert("⚠️ Please switch to Polygon Network manually.");
-          return;
-        }
-      }
+      alert("⚠️ Please switch to Polygon Mainnet (Chain ID 137) in your wallet.");
+      return;
     }
 
   } else {
     // ✅ Trust Wallet / Others via WalletConnect
     const wcProvider = new WalletConnectProvider.default({
       rpc: {
-        137: "https://polygon-rpc.com"   // ⚠️ Polygon RPC
+        137: "https://polygon-rpc.com"
       },
     });
     await wcProvider.enable();
     provider = new ethers.providers.Web3Provider(wcProvider);
+
+    // 🔍 Check again
+    const network = await provider.getNetwork();
+    if (network.chainId !== 137) {
+      alert("⚠️ Please switch to Polygon Mainnet (Chain ID 137).");
+      return;
+    }
   }
 
   signer = provider.getSigner();
@@ -130,6 +110,7 @@ async function connectWallet() {
 
   loadInfo();
 }
+
     
 
     
