@@ -1,4 +1,3 @@
-<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +5,10 @@
   <title>Navaraa Staking UI</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   
-  <!---- connect for mobile version ----
+  <!---- connect for mobile version ---->
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <!----------------------------->
 
-  <!--
   <style>
     body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
     .card { background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); max-width:600px; margin:auto; }
@@ -32,7 +30,7 @@
     <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
     <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
   </div>
-<!----------------------J A V A S C R I P T-----S T A R T-------------------------------
+<!----------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
     const CONTRACT_ADDRESS = "0x9fd473975cecd4587d78eb71f4498dde778c4b83";
 
@@ -136,172 +134,6 @@ async function connectWallet() {
     document.getElementById("withdrawBtn").onclick = withdrawPrincipal;
   </script>
 </body>
-</html>    --->
-
-
-<!----------------------Second code --------->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Navaraa Staking UI</title>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  
-  <style>
-    body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
-    .card { background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); max-width:600px; margin:auto; }
-    button { padding:10px 16px; margin:6px 0; border:none; border-radius:8px; cursor:pointer; }
-    .btn { background:#4CAF50; color:#fff; }
-    .btn:hover { background:#45a049; }
-    .danger { background:#e53935; color:#fff; }
-    .danger:hover { background:#d32f2f; }
-    /* Modal */
-    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; }
-    .modal-content { background:#fff; padding:20px; border-radius:12px; text-align:center; }
-    .wallet-option { display:block; margin:10px auto; padding:12px; width:80%; border:1px solid #ddd; border-radius:8px; cursor:pointer; font-weight:bold; }
-    .wallet-option:hover { background:#f0f0f0; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h2>Navaraa Staking UI</h2>
-    <button id="connectButton" class="btn">Connect Wallet</button>
-    <p><b>Wallet:</b> <span id="wallet">Not connected</span></p>
-    <p><b>Stake Count:</b> <span id="stakeCount">-</span></p>
-    <p><b>Pending Reward (stake #0):</b> <span id="pendingReward">-</span></p>
-
-    <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
-    <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
-  </div>
-
-  <!-- Wallet Modal -->
-  <div id="walletModal" class="modal">
-    <div class="modal-content">
-      <h3>Select Wallet</h3>
-      <div id="metamaskBtn" class="wallet-option">🦊 MetaMask</div>
-      <div id="trustBtn" class="wallet-option">Trust Wallet</div>
-      <div id="safepalBtn" class="wallet-option">SafePal</div>
-      <button onclick="closeModal()" style="margin-top:10px;">Close</button>
-    </div>
-  </div>
-
-<script>
-const CONTRACT_ADDRESS = "0x9fd473975cecd4587d78eb71f4498dde778c4b83";
-const ABI = [
-  "function stakeCount(address user) view returns (uint256)",
-  "function pendingRewardForStake(address user, uint256 index) view returns (uint256)",
-  "function claimStakingRewards(uint256[] calldata indices)",
-  "function withdrawPrincipal(uint256[] calldata indices)"
-];
-
-let provider, signer, contract, userAddress;
-
-/*********** Wallet Connect Functions ***********/
-function openModal() {
-  document.getElementById("walletModal").style.display = "flex";
-}
-function closeModal() {
-  document.getElementById("walletModal").style.display = "none";
-}
-
-async function connectMetaMask() {
-  if (!window.ethereum) {
-    alert("MetaMask not found! Install it first.");
-    return;
-  }
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  finalizeConnection();
-}
-
-async function connectTrustWallet() {
-  const wcProvider = new WalletConnectProvider.default({
-    rpc: { 137: "https://polygon-rpc.com" }
-  });
-  await wcProvider.enable();
-  provider = new ethers.providers.Web3Provider(wcProvider);
-  finalizeConnection();
-}
-
-async function connectSafePal() {
-  // SafePal also works with WalletConnect
-  return connectTrustWallet();
-}
-
-async function finalizeConnection() {
-  const network = await provider.getNetwork();
-  if (network.chainId !== 137) {
-    alert("⚠️ Please switch to Polygon Mainnet (Chain ID 137).");
-    return;
-  }
-  signer = provider.getSigner();
-  userAddress = await signer.getAddress();
-  document.getElementById("wallet").innerText = userAddress;
-  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-  closeModal();
-  loadInfo();
-}
-
-/*********** Load Contract Info ***********/
-async function loadInfo() {
-  try {
-    const count = await contract.stakeCount(userAddress);
-    document.getElementById("stakeCount").innerText = count.toString();
-    if (count > 0) {
-      const pending = await contract.pendingRewardForStake(userAddress, 0);
-      document.getElementById("pendingReward").innerText = ethers.utils.formatEther(pending) + " tokens";
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Error loading info");
-  }
-}
-
-async function claimReward() {
-  try {
-    const tx = await contract.claimStakingRewards([0]);
-    alert("Claiming... Tx: " + tx.hash);
-    await tx.wait();
-    alert("Reward claimed!");
-    loadInfo();
-  } catch (err) {
-    console.error(err);
-    alert("Claim failed: " + err.message);
-  }
-}
-
-async function withdrawPrincipal() {
-  try {
-    const tx = await contract.withdrawPrincipal([0]);
-    alert("Withdrawing... Tx: " + tx.hash);
-    await tx.wait();
-    alert("Principal withdrawn!");
-    loadInfo();
-  } catch (err) {
-    console.error(err);
-    alert("Withdraw failed: " + err.message);
-  }
-}
-
-/*********** Button Events ***********/
-document.getElementById("connectButton").onclick = openModal;
-document.getElementById("metamaskBtn").onclick = connectMetaMask;
-document.getElementById("trustBtn").onclick = connectTrustWallet;
-document.getElementById("safepalBtn").onclick = connectSafePal;
-document.getElementById("claimBtn").onclick = claimReward;
-document.getElementById("withdrawBtn").onclick = withdrawPrincipal;
-</script>
-</body>
 </html>
-
-
-
-
-
-
-
-
-
 
 
