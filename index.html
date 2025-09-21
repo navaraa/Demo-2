@@ -26,8 +26,12 @@
     <p><b>Wallet:</b> <span id="wallet">Not connected</span></p>
     <p><b>Stake Count:</b> <span id="stakeCount">-</span></p>
     <p><b>Pending Reward (stake #0):</b> <span id="pendingReward">-</span></p>
-    
-    <!--------Stake Container -------------->
+
+    <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
+    <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
+  </div>
+
+<!--------Stake Container -------------->
     
     <h3>Stake Tokens</h3>
     <input id="stakeAmount" type="text" placeholder="Enter amount to stake"/>
@@ -35,9 +39,8 @@
     
     <!--------------------------------------->
 
-    <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
-    <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
-  </div>
+  
+  
 <!----------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
     const CONTRACT_ADDRESS = "0x9fd473975cecd4587d78eb71f4498dde778c4b83";
