@@ -31,7 +31,7 @@
     <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
     <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
   </div>
-
+<!----------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
     const CONTRACT_ADDRESS = "0x9fd473975cecd4587d78eb71f4498dde778c4b83";
 
@@ -45,33 +45,7 @@
     let provider, signer, contract, userAddress;
     
     /***********Desktop+Mobile wallet connect ******/
-  /*  async function connectWallet() {
-  if (window.ethereum) {
-    // ✅ MetaMask (Desktop + Mobile)
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-  } else {
-    // ✅ Trust Wallet / Others via WalletConnect
-    const wcProvider = new WalletConnectProvider.default({
-      rpc: {
-        137: "https://polygon-rpc.com"   // ⚠️ Polygon RPC (agar dusra chain hai to badal dena)
-      },
-    });
-    await wcProvider.enable();
-    provider = new ethers.providers.Web3Provider(wcProvider);
-  }
-
-  signer = provider.getSigner();
-  userAddress = await signer.getAddress();
-  document.getElementById("wallet").innerText = userAddress;
-  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
-  loadInfo();
-}
-
-  */
-    /************ just check auto redirect network Polygon ********/
-/* 
+    
 async function connectWallet() {
   if (window.ethereum) {
     // ✅ MetaMask (Desktop + Mobile)
@@ -109,75 +83,7 @@ async function connectWallet() {
   contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
   loadInfo();
-}   */
-
-    async function connectWallet() {
-  if (window.ethereum) {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-
-    const network = await provider.getNetwork();
-    if (network.chainId !== 137) {
-      alert("⚠️ Please switch to Polygon Mainnet (Chain ID 137).");
-
-      try {
-        // ✅ Auto switch prompt kholna
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x89' }], // Polygon Mainnet
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          try {
-            // ✅ Agar Polygon add nahi hai to add kar do
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [{
-                chainId: '0x89',
-                chainName: 'Polygon Mainnet',
-                nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
-                rpcUrls: ['https://polygon-rpc.com/'],
-                blockExplorerUrls: ['https://polygonscan.com/'],
-              }],
-            });
-          } catch (addError) {
-            alert("⚠️ Please add Polygon manually in your wallet.");
-            return;
-          }
-        } else {
-          return;
-        }
-      }
-    }
-
-  } else {
-    const wcProvider = new WalletConnectProvider.default({
-      rpc: {
-        137: "https://polygon-rpc.com"
-      },
-    });
-    await wcProvider.enable();
-    provider = new ethers.providers.Web3Provider(wcProvider);
-
-    const network = await provider.getNetwork();
-    if (network.chainId !== 137) {
-      alert("⚠️ Please switch to Polygon Mainnet (137).");
-      return;
-    }
-  }
-
-  signer = provider.getSigner();
-  userAddress = await signer.getAddress();
-  document.getElementById("wallet").innerText = userAddress;
-  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
-  loadInfo();
-}
-
-
-    
-
-    
+}  
 
 /*****************************************************/
 
