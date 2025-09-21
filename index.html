@@ -43,24 +43,7 @@
     ];
 
     let provider, signer, contract, userAddress;
-/**********************************************
-    async function connectWallet() {
-      if (!window.ethereum) {
-        alert("MetaMask not found!");
-        return;
-      }
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      signer = provider.getSigner();
-      userAddress = await signer.getAddress();
-      document.getElementById("wallet").innerText = userAddress;
-
-      contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
-      loadInfo();
-    }.   **************************************************/
-
-    /***********Desktop+Mobile connect wallet if work then done*********/
+    /***********Desktop+Mobile wallet connect ******/
     async function connectWallet() {
   if (window.ethereum) {
     // ✅ MetaMask (Desktop + Mobile)
