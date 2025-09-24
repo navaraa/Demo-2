@@ -34,9 +34,29 @@
       box-shadow:0 2px 8px rgba(0,0,0,0.1); 
       max-width:600px; margin:auto; 
     }
-    button { 
+    
+
+  /********header design****/
+   .header {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     padding: 2rem 9%;
+     display: flex;
+     justify-content: space-between;
+     align-item: center;
+     z-index: 100;  
+   }
+    .logo {
+      font-size: 2.5rem;
+      font: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: purple;
+    }
+    .button {
       padding:10px 16px; 
-      margin:6px 0; 
+      margin:6px 0;
       border:none; 
       border-radius:8px; 
       cursor:pointer; 
@@ -55,26 +75,10 @@
     .danger:hover {
       background:#d32f2f; 
     }
-
-  /********header design****/
-   .header {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     padding: 2rem 9%;
-     display: flex;
-     justify-content: space-between;
-     align-item: center;
-     z-index: 100;  
-   }
-    .logo {
-      font-size: 2.5rem;
-      font: 'Poppins', sans-serif;
-      font-weight: 900;
-      color: purple;
-    }
+    
            /*--- End----*/
+
+    
   </style>
 </head>
 
