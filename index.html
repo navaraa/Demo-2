@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Navaraa Staking UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <!---- connect for mobile version ---->
@@ -82,6 +83,10 @@
       font-weight: 500;
       font-size: 27px;
     }
+    .address {
+      display: flex;
+      align-item: center;
+    }
 
     .card { 
       background:#fff;
@@ -107,7 +112,7 @@
 
     <div class="main-content" >
       <div class="wallet-address"> 
-        <p><b>Wallet:</b> <span id="wallet">Not connected</span></p>
+        <p class="address"><b>Wallet:</b> <span id="wallet">Not connected</span></p>
       </div>
   <div class="card">
     <p><b>Wallet:</b> <span id="wallet">Not connected</span></p>
