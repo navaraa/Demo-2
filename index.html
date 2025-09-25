@@ -224,8 +224,55 @@ async function connectWallet() {
       }
     }
 
+    // Render stake cards.    -----extra
+async function renderStakes() {
+  if (!contract || !userAddress) return;
+  const container = document.getElementById("stakesContainer");
+  container.innerHTML = "";
+
+  const count = await contract.stakeCount(userAddress);
+
+  for (let i = 0; i < count; i++) {
+    const stake = await contract.getStake(userAddress, i);
+    const pending = await contract.pendingRewardForStake(userAddress, i);
+
+    // calculate maturity time
+    const stakeDuration = await contract.STAKE_DURATION();
+    const endTime = parseInt(stake.startTime) + parseInt(stakeDuration);
+    const now = Math.floor(Date.now() / 1000);
+    const timeLeft = Math.max(0, endTime - now);
+
+    const card = document.createElement("div");
+    card.className = "stake-card";
+    card.innerHTML = `
+      <div class="stake-left">
+        <div class="stake-title">Stake #${i}</div>
+        <div class="stake-info">Principal: ${ethers.utils.formatEther(stake.amount)} NAVAA</div>
+        <div class="stake-info">Start: ${new Date(stake.startTime * 1000).toLocaleString()}</div>
+        <div class="stake-info">Maturity in: <span id="timeLeft-${i}">${formatTime(timeLeft)}</span></div>
+      </div>
+      <div class="stake-right">
+        <div class="stake-info">Total Reward: ${ethers.utils.formatEther(stake.totalReward)} NAVAA</div>
+        <div class="stake-info">Claimed: ${ethers.utils.formatEther(stake.claimed)} NAVAA</div>
+        <div class="stake-info">Live Reward: <span id="liveReward-${i}">${ethers.utils.formatEther(pending)}</span> NAVAA</div>
+        <div class="stake-actions">
+          <button onclick="claimReward(${i})">Claim</button>
+          <button onclick="withdrawPrincipal(${i})" ${timeLeft > 0 ? "disabled" : ""}>Withdraw</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+
     //Live update every seconds -----extra 
-    
+    setInterval(async () => {
+      const no2 = Math.floor(Date.now() / 1000);
+      const left = Math.max(0, endTime - now2);
+      document.getElementById(`timeLeft-${i}`).innerText = formatTime(left);
+      const newPending = await contract.pendingRewardForstake(userAddress, i);
+      document.getElementById(`liveReward-${i}`).innerText = (ethers.utils.formatEther(newPending));
+    }, 1000);
+    }
+    }
 
     
 // Timer formatter. ----- extra
