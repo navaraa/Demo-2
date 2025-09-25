@@ -83,10 +83,22 @@
       font-weight: 500;
       font-size: 27px;
     }
-    p.wallet-info {
-      display: flex;
-      align-item: center;
-    }
+    .wallet-info {
+  display: inline-flex;       /* inline-flex better hai agar <p> ke saath line break nahi chahiye */
+  align-items: center;        /* vertical alignment */
+  gap: 5px;                   /* <b> aur <span> ke beech thoda space */
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+}
+
+.wallet-info b {
+  line-height: 1;             /* bold text ke height ko normal karo */
+}
+
+.wallet-info span {
+  line-height: 1;             /* span ke liye bhi */
+}
+
 
     .card { 
       background:#fff;
