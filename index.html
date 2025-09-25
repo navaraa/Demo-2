@@ -80,14 +80,26 @@
     /*__________________SECTION 2 : WALLET INFO _____________________*/
     .wallet-info {
       background: yellow; /* for testing*/
-      font-weight: 500;
-      font-size: 27px;
+      display: flex;
+      justify-content: center;   /* horizontal center */
+      margin: 20px 0;
     }
+    
     .w-add {
-      padding: 10px 20px;
-      font-size: 28px;
+      display: flex;
+      align-items: center;
+   /*   gap: 10px;                 /* icon aur address ke beech gap */
+      background: #fff;          /* white box */
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* modern soft shadow */
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+      min-width: 300px;          /* thoda bada box */
+      justify-content: center;   /* icon + address center me */
     }
-
+    
     .card { 
       background:#fff;
       border-radius:12px;
@@ -116,7 +128,7 @@
     
     <div class="main-content" >
       <div class="wallet-info">
-        <div class="w-add" id="wallet">"USER address"</div>
+        <div class="w-add" id="wallet">"Not Connected"</div>
       </div>
       
   <div class="card">
