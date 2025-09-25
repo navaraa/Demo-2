@@ -71,14 +71,13 @@
     }
 /*--**************************- -E N D--****************************-*/
     
-    /*__________________SECTION 2 : MAIN CONTAINER_____________________*/
+    /*___________SECTION 2 & 3: WALLET INFO + Total stake count_______*/
     .main-content {
       margin-top: 150px;
       Padding: 0px 20px;
     }
-
-    /*__________________SECTION 2 : WALLET INFO _____________________*/
-    .wallet-info {
+    .wallet-info, 
+    .total-stake {
       display: flex;
       justify-content: center;   /* horizontal center */
       margin: 20px 0;
@@ -96,6 +95,8 @@
       min-width: 30%;          /* thoda bada box */
       justify-content: center;   /* icon + address center me */
     }
+    
+    /*__________________SECTION 3 : Total stake count_____________________*/
     
     .card { 
       background:#fff;
@@ -121,22 +122,24 @@
   
          <button id="connectButton" class="btn">Connect Wallet</button>
       </header>
-    <!-----/header section end--->
-    
+    <!-----/////////////////--->
+  <!----Section 2 : wallet address ---------->
     <div class="main-content" >
       <div class="wallet-info">
         <div class="w-add" id="wallet">"Not Connected"</div>
       </div>
-      
+    </div>
+    <!----Section 3 : Total stake count ------>
+      <div class="total-stake">
+        <p><b>Stake Count:</b> <span id="stakeCount">-</span></p>
+      </div>
   <div class="card">
- <!--   <p><b>Wallet:</b> <span id="wallet">Not connected</span></p>. --->
-    <p><b>Stake Count:</b> <span id="stakeCount">-</span></p>
+    <!--<p><b>Stake Count:</b> <span id="stakeCount">-</span></p>  -->
     <p><b>Pending Reward (stake #0):</b> <span id="pendingReward">-</span></p>
 
     <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
     <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
   </div>
-    </div>
 
   
   
