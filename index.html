@@ -189,6 +189,10 @@ async function connectWallet() {
   signer = provider.getSigner();
   userAddress = await signer.getAddress();
   document.getElementById("wallet").innerText = userAddress;
+  const connectBtn = document.getElementById("connectButton");
+  connectBtn.innerText = "Connected";
+  connectBtn.disabled = true;
+  connectBtn.style.background = "#2e7d32";
   contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
   loadInfo();
