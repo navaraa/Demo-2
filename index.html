@@ -36,18 +36,30 @@
      top: 0;
      left: 0;
      width: 100%;
-     padding: 2rem 9%;
+     padding: 1rem 9%;
      display: flex;
      justify-content: space-between;
      align-item: center;
      z-index: 100;  
    }
-    .logo {
-      font-size: 2.5rem;
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px; /* logo aur text ke beech space */
+    }
+    
+    .logo-img {
+      height: 40px;  /* apne logo ka size adjust kar sakte ho */
+      width: auto;
+    }
+    
+    .logo-text {
+      font-size: 2rem;
       font: 'Poppins', sans-serif;
       font-weight: 600;
       color: purple;
     }
+    
     .button {
       padding:14px 22px; 
       margin:6px 0;
@@ -99,13 +111,18 @@
 </head>
 
   <body>
-
   <!------------- h t m l   c o d e    h e r e ------->
+
+    <!--- Section_1: header ( logo.png + logo text + connect wallet) ----->
     
       <header class="header">
-        <a href="#" class="logo">NAVAA</a>
+        <div class="logo-container">
+          <img src="logo.png" alt="Logo" class="logo-img" />
+          <span class="logo-text">NAVAA</span>
+        </div>
          <button id="connectButton" class="btn">Connect Wallet</button>
       </header>
+    <!-----/header section end--->
 
     <div class="main-content" >
       <div class="wallet-info"> 
