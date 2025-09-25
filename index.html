@@ -60,20 +60,38 @@
       font-weight: 600;
       color: purple;
     }
-
-    .button {
-      background: black;
+    
+    .btn { 
+      background: #4CAF50;          /* green background */
+      color: #fff;                  /* white text */
       font-family: 'Poppins', sans-serif;
-      font-size: 20px;
+      font-size: 16px;              /* normal readable size */
+      padding: 10px 20px;           /* andar ka gap */
+      border: none;
+      border-radius: 8px;           /* thoda rounded */
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.2s; /* hover animation */
     }
     
-  /*  .button {
-      padding:10px 16px; 
-      margin:8px 0;
-      border:none; 
-      border-radius: 25px; 
-      cursor:pointer; 
+    .btn:hover { 
+      background: #45a049;          /* thoda dark green */
+      transform: scale(1.05);       /* thoda zoom hover pe */
     }
+    
+    .btn:active {
+      transform: scale(0.95);       /* dabane pe chhota feel */
+    }
+    
+    .danger { 
+      background: #e53935;          /* red */
+    }
+    
+    .danger:hover {
+      background: #d32f2f;          /* dark red */
+    }
+    
+  /*  
     .btn { 
       background:#4CAF50; 
       color:#fff; 
