@@ -102,32 +102,19 @@
     }
     
     /*__________________SECTION 4 : Total stake count_____________________*/
-    /*
-    .card { 
-      background:#fff;
-      border-radius:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1); 
-      max-width: 100%; 
-      margin: 2rem 9%;
-      padding: 20px;
-    }
+    
 
-    */
   </style>
 </head>
-
   <body>
   <!------------- h t m l   c o d e    h e r e ------->
-
     <!--- Section_1: header ( logo.png + logo text + connect wallet) ----->
       <header class="header">
         <div class="logo-container">
           <img src="logo.png" alt="Logo" class="logo-img" />
         </div>
-  
          <button id="connectButton" class="btn">Connect Wallet</button>
       </header>
-    <!-----/////////////////--->
   <!----Section 2 : wallet address ---------->
     <div class="main-content" >
       <div class="wallet-info">
@@ -139,14 +126,6 @@
         <div class="stake-text">Total Stake:</div> 
         <div class="stake-no" id="stakeCount">-</div>
       </div>
-    <!----Section 4 : User Stake Card ----------
-  <div class="card">
-    <p><b>Pending Reward (stake #0):</b> <span id="pendingReward">-</span></p>
-
-    <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
-    <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
-  </div>
------->
     <!----Section 4 : User Stake Cards (dynamic) ------EXTRA----> 
 <div id="stakeCards"></div>
     
@@ -211,25 +190,6 @@ async function connectWallet() {
   loadInfo();
 }  
 
-/*****************************************************/
-
-    /*
-
-    async function loadInfo() {
-      try {
-        const count = await contract.stakeCount(userAddress);
-        document.getElementById("stakeCount").innerText = count.toString();
-
-        if (count > 0) {
-          const pending = await contract.pendingRewardForStake(userAddress, 0);
-          document.getElementById("pendingReward").innerText = ethers.utils.formatEther(pending) + " tokens";
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error loading info");
-      }
-    }     */
-
     /*__________________Extra_________________*/
 
 async function loadInfo() {
@@ -242,10 +202,14 @@ async function loadInfo() {
 
     for (let i = 0; i < count; i++) {
       const pending = await contract.pendingRewardForStake(userAddress, i);
+      const stakeInfo = await contract.getStake(userAddress, i);
+      
+      const amount = stakeInfo.amount;  // 👈 ye user ka staked principal hai
 
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
+      <p><b>Staked Amount (stake #${i}):</b> ${ethers.utils.formatEther(amount)} tokens</p>
         <p><b>Pending Reward (stake #${i}):</b> ${ethers.utils.formatEther(pending)} tokens</p>
         <button class="btn claimBtn" data-index="${i}">Claim Reward (Stake #${i})</button><br/>
         <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal (Stake #${i})</button>
@@ -295,36 +259,7 @@ async function withdrawPrincipal(index) {
 }
     
     
-
-
-    
-/*-------------------------------End Extra---------------------
-    async function claimReward() {
-      try {
-        const tx = await contract.claimStakingRewards([0]);
-        alert("Claiming... Tx: " + tx.hash);
-        await tx.wait();
-        alert("Reward claimed!");
-        loadInfo();
-      } catch (err) {
-        console.error(err);
-        alert("Claim failed: " + err.message);
-      }
-    }
-
-    async function withdrawPrincipal() {
-      try {
-        const tx = await contract.withdrawPrincipal([0]);
-        alert("Withdrawing... Tx: " + tx.hash);
-        await tx.wait();
-        alert("Principal withdrawn!");
-        loadInfo();
-      } catch (err) {
-        console.error(err);
-        alert("Withdraw failed: " + err.message);
-      }
-    }
-*/
+/*-------------------------------End Extra---------------------*/
     document.getElementById("connectButton").onclick = connectWallet;
   //  document.getElementById("claimBtn").onclick = claimReward;
   //  document.getElementById("withdrawBtn").onclick = withdrawPrincipal;
