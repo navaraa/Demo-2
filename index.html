@@ -155,14 +155,15 @@
 <!---------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
     const CONTRACT_ADDRESS = "0x9fd473975cecd4587d78eb71f4498dde778c4b83";
-    
-    const ABI = [
-      "function stakeCount(address user) view returns (uint256)",
-      "function pendingRewardForStake(address user, uint256 index) view returns (uint256)",
-      "function claimStakingRewards(uint256[] calldata indices)",
-      "function withdrawPrincipal(uint256[] calldata indices)"
-    ];
 
+    const ABI = [
+  "function stakeCount(address user) view returns (uint256)",
+  "function pendingRewardForStake(address user, uint256 index) view returns (uint256)",
+  "function getStake(address user, uint256 index) view returns (uint256 amount, uint256 startTime, uint256 claimed, bool principalWithdrawn, uint256 totalReward)",
+  "function claimStakingRewards(uint256[] calldata indices)",
+  "function withdrawPrincipal(uint256[] calldata indices)"
+];
+    
     let provider, signer, contract, userAddress;
     
     /***********Desktop+Mobile wallet connect ******/
