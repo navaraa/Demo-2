@@ -102,7 +102,7 @@
     }
     
     /*__________________SECTION 4 : Total stake count_____________________*/
-    
+    /*
     .card { 
       background:#fff;
       border-radius:12px;
@@ -112,7 +112,7 @@
       padding: 20px;
     }
 
-    
+    */
   </style>
 </head>
 
@@ -139,14 +139,17 @@
         <div class="stake-text">Total Stake:</div> 
         <div class="stake-no" id="stakeCount">-</div>
       </div>
-    <!----Section 4 : User Stake Card ----------> 
+    <!----Section 4 : User Stake Card ----------
   <div class="card">
     <p><b>Pending Reward (stake #0):</b> <span id="pendingReward">-</span></p>
 
     <button id="claimBtn" class="btn">Claim Reward (Stake #0)</button><br/>
     <button id="withdrawBtn" class="danger">Withdraw Principal (Stake #0)</button>
   </div>
-
+------>
+    <!----Section 4 : User Stake Cards (dynamic) ------EXTRA----> 
+<div id="stakeCards"></div>
+    
   
   
 <!---------------------J A V A S C R I P T-----S T A R T------------------------------->
@@ -209,7 +212,7 @@ async function connectWallet() {
 
 /*****************************************************/
 
-    
+    /*
 
     async function loadInfo() {
       try {
@@ -224,8 +227,77 @@ async function connectWallet() {
         console.error(err);
         alert("Error loading info");
       }
+    }     */
+
+    /*__________________Extra_________________*/
+
+async function loadInfo() {
+  try {
+    const count = await contract.stakeCount(userAddress);
+    document.getElementById("stakeCount").innerText = count.toString();
+
+    const stakeCardsContainer = document.getElementById("stakeCards");
+    stakeCardsContainer.innerHTML = ""; // purane cards clear karo
+
+    for (let i = 0; i < count; i++) {
+      const pending = await contract.pendingRewardForStake(userAddress, i);
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <p><b>Pending Reward (stake #${i}):</b> ${ethers.utils.formatEther(pending)} tokens</p>
+        <button class="btn claimBtn" data-index="${i}">Claim Reward (Stake #${i})</button><br/>
+        <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal (Stake #${i})</button>
+      `;
+
+      stakeCardsContainer.appendChild(card);
     }
 
+    // Buttons ko activate karo
+    document.querySelectorAll(".claimBtn").forEach(btn => {
+      btn.onclick = () => claimReward(btn.dataset.index);
+    });
+
+    document.querySelectorAll(".withdrawBtn").forEach(btn => {
+      btn.onclick = () => withdrawPrincipal(btn.dataset.index);
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Error loading info: " + err.message);
+  }
+}
+    async function claimReward(index) {
+  try {
+    const tx = await contract.claimStakingRewards([index]);
+    alert("Claiming stake #" + index + " ... Tx: " + tx.hash);
+    await tx.wait();
+    alert("Reward claimed for stake #" + index);
+    loadInfo();
+  } catch (err) {
+    console.error(err);
+    alert("Claim failed: " + err.message);
+  }
+}
+
+async function withdrawPrincipal(index) {
+  try {
+    const tx = await contract.withdrawPrincipal([index]);
+    alert("Withdrawing stake #" + index + " ... Tx: " + tx.hash);
+    await tx.wait();
+    alert("Principal withdrawn for stake #" + index);
+    loadInfo();
+  } catch (err) {
+    console.error(err);
+    alert("Withdraw failed: " + err.message);
+  }
+}
+    
+    
+
+
+    
+/*-------------------------------End Extra---------------------
     async function claimReward() {
       try {
         const tx = await contract.claimStakingRewards([0]);
@@ -251,10 +323,10 @@ async function connectWallet() {
         alert("Withdraw failed: " + err.message);
       }
     }
-
+*/
     document.getElementById("connectButton").onclick = connectWallet;
-    document.getElementById("claimBtn").onclick = claimReward;
-    document.getElementById("withdrawBtn").onclick = withdrawPrincipal;
+  //  document.getElementById("claimBtn").onclick = claimReward;
+  //  document.getElementById("withdrawBtn").onclick = withdrawPrincipal;
   </script>
 </body>
 </html>
