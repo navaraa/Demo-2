@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Navaraa Staking UI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navaraa Staking UI</title> <!--
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">.    --->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <!---- connect for mobile version ---->
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
@@ -101,7 +101,7 @@
       gap: 20px
     }
     
-    /*__________________SECTION 4 : Total stake count_____________________*/
+    /*__________________SECTION 4 : User stake card (dymenic)____________________*/
     
     /* Container jisme cards show honge */
 #stakeCards {
@@ -114,7 +114,6 @@
 
 /* Har stake ka card */
 .card {
-  width: 100%;
   background: #1e1e2f;
   color: #fff;
   border-radius: 15px;
@@ -167,6 +166,8 @@
   background: #d32f2f;
 }
 
+        /*__________________SECTION 5 : Total stake count_____________________*/
+
     
 
   </style>
@@ -192,9 +193,9 @@
         <div class="stake-no" id="stakeCount">-</div>
       </div>
     <!----Section 4 : User Stake Cards (dynamic) ------EXTRA---->
-    <div class="card-wrapper">
     <div id="stakeCards"></div>
-    </div> 
+
+    
   
 <!---------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
