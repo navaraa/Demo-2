@@ -102,69 +102,6 @@
     }
     
     /*__________________SECTION 4 : User stake card (dymenic)____________________*/
-    
-    /* Container jisme cards show honge 
-#stakeCards {
-  display: grid;
-  place-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Har stake ka card 
-.card {
-  background: #1e1e2f;
-  color: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Hover effect 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-}
-
-/* Text styling 
-.card p {
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-/* Buttons 
-.btn, .danger {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s ease;
-}
-
-/* Claim button 
-.btn {
-  background: #4cafef;
-  color: white;
-}
-
-.btn:hover {
-  background: #2196f3;
-}
-
-/* Withdraw button 
-.danger {
-  background: #f44336;
-  color: white;
-}
-
-.danger:hover {
-  background: #d32f2f;
-}
 
     /* Container jisme cards center me show honge */
 #stakeCards {
@@ -230,6 +167,20 @@
 .danger:hover {
   background: #d32f2f;
 }
+    .card-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+}
+
+.card-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+    
     
 
         /*__________________SECTION 5 : Total stake count_____________________*/
@@ -340,12 +291,26 @@ async function loadInfo() {
 
       const card = document.createElement("div");
       card.className = "card";
+
+      /****extra*****/
+
+      card.innerHTML = `
+  <h3 class="card-title">Stake #${i}</h3>
+  <p><b>Staked Amount:</b> ${ethers.utils.formatEther(amount)} tokens</p>
+  <p><b>Pending Reward:</b> ${ethers.utils.formatEther(pending)} tokens</p>
+  <div class="card-actions">
+    <button class="btn claimBtn" data-index="${i}">Claim Reward</button>
+    <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal</button>
+  </div>
+`;
+
+      /*
       card.innerHTML = `
       <p><b>Staked Amount (stake #${i}):</b> ${ethers.utils.formatEther(amount)} tokens</p>
         <p><b>Pending Reward (stake #${i}):</b> ${ethers.utils.formatEther(pending)} tokens</p>
         <button class="btn claimBtn" data-index="${i}">Claim Reward (Stake #${i})</button><br/>
         <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal (Stake #${i})</button>
-      `;
+      `;  */
 
       stakeCardsContainer.appendChild(card);
     }
