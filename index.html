@@ -314,7 +314,6 @@
 #stakeModal .modal-buttons button {
   flex: 1;
 }
-    
 
 
 
@@ -577,7 +576,6 @@ async function withdrawPrincipal(index) {
     document.getElementById("connectButton").onclick = connectWallet;
 
     ////////////////////////
-
 function openStake() {
   document.getElementById("stakeModal").style.display = "flex";
 }
@@ -595,9 +593,9 @@ async function stakeNow() {
       return;
     }
 
-    const amount = ethers.utils.parseEther(amountInput.toString());
+    const amount = ethers.utils.parseUnits(amountInput.toString(), 18);
 
-    // 1️⃣ Approve token
+    // Approve token
     const tokenContract = new ethers.Contract(NAVAA_TOKEN, [
       "function approve(address spender, uint256 amount) returns (bool)"
     ], signer);
@@ -606,24 +604,23 @@ async function stakeNow() {
     alert("Approving tokens... Tx: " + approveTx.hash);
     await approveTx.wait();
 
-    // 2️⃣ Stake tokens
-    const tx = await contract.stake(amount);
+    // Stake tokens (referrer = 0 → management wallet used)
+    const tx = await contract.stakeTokens(amount, ethers.constants.AddressZero);
     alert("Staking... Tx: " + tx.hash);
     await tx.wait();
 
     alert("✅ Stake successful!");
     closeStake();
 
-    // Refresh info
     loadInfo();
     loadBalances();
 
   } catch (err) {
     console.error(err);
-    alert("Stake failed: " + err.message);
+    alert("Stake failed: " + (err?.reason || err?.message || "Unknown error"));
   }
 }
-    
+
 
     //////////////////////////
 
