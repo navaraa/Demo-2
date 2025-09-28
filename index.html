@@ -272,9 +272,6 @@ const TOKEN_ABI = [
   "function balanceOf(address account) view returns (uint256)",
   "function decimals() view returns (uint8)"
 ];
-//////////////////////////////
-
-    
     const ABI = [
   "function stakeCount(address user) view returns (uint256)",
   "function pendingRewardForStake(address user, uint256 index) view returns (uint256)",
@@ -331,7 +328,7 @@ async function connectWallet() {
   await loadBalances();
 }  
 
-    /*__________________Extra_________________ */
+    /*__________________Total Card design________________ */
 
     async function loadInfo() {
   try {
@@ -404,8 +401,7 @@ async function connectWallet() {
     alert("Error loading info: " + err.message);
   }
 }
-////////////extra
-// ✅ Ab yahan neeche ye paste karo
+// ✅ POL aur Navaa Balance with Logo
 async function loadBalances() {
   if (!provider || !userAddress) return;
 
@@ -426,14 +422,11 @@ async function loadBalances() {
       ${parseFloat(polFormatted).toFixed(4)} POL
     </div>
     <div class="token-balance">
-      <img src="Logo.png" alt="Navaa">
+      <img src="logo.png" alt="Navaa">
       ${parseFloat(navaaFormatted).toFixed(4)} Navaa
     </div>
   `;
 }
-    
-    
-
     
     ///////////////////////////////////////
     async function claimReward(index) {
