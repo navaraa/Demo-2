@@ -265,8 +265,60 @@
   transform: translateY(-2px);
 }
     
-    /*----_---------------------------------------------,*/
+    /*----_-------------------Stake working--------------------------,*/
+/* -------- Stake Modal -------- */
+#stakeModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
 
+#stakeModal .modal-content {
+  background: #1e1e2f;
+  padding: 25px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+#stakeModal .modal-content h2 {
+  margin-bottom: 20px;
+}
+
+#stakeModal .modal-content input {
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #444;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+#stakeModal .modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#stakeModal .modal-buttons button {
+  flex: 1;
+}
+    
+
+
+
+    
   </style>
 </head>
   <body>
@@ -312,6 +364,20 @@
     <span>History</span>
   </div>
 </div>
+    <!----Section 5 : Stake working------EXTRA---->
+
+    <!-- Stake Modal -->
+<div id="stakeModal" style="display:none;">
+  <div class="modal-content">
+    <h2>Stake Navaa</h2>
+    <input type="number" id="stakeAmount" placeholder="Enter amount" />
+    <div class="modal-buttons">
+      <button onclick="stakeNow()" class="btn">Stake Now</button>
+      <button onclick="closeStake()" class="danger">Cancel</button>
+    </div>
+  </div>
+</div>
+    
   
 <!---------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
@@ -510,14 +576,66 @@ async function withdrawPrincipal(index) {
     /*-------------------------------End Extra---------------------*/
     document.getElementById("connectButton").onclick = connectWallet;
 
+    ////////////////////////
+
+function openStake() {
+  document.getElementById("stakeModal").style.display = "flex";
+}
+
+function closeStake() {
+  document.getElementById("stakeModal").style.display = "none";
+}
+
+async function stakeNow() {
+  try {
+    const amountInput = document.getElementById("stakeAmount").value;
+
+    if (!amountInput || isNaN(amountInput) || parseFloat(amountInput) <= 0) {
+      alert("Enter a valid amount");
+      return;
+    }
+
+    const amount = ethers.utils.parseEther(amountInput.toString());
+
+    // 1️⃣ Approve token
+    const tokenContract = new ethers.Contract(NAVAA_TOKEN, [
+      "function approve(address spender, uint256 amount) returns (bool)"
+    ], signer);
+
+    const approveTx = await tokenContract.approve(CONTRACT_ADDRESS, amount);
+    alert("Approving tokens... Tx: " + approveTx.hash);
+    await approveTx.wait();
+
+    // 2️⃣ Stake tokens
+    const tx = await contract.stake(amount);
+    alert("Staking... Tx: " + tx.hash);
+    await tx.wait();
+
+    alert("✅ Stake successful!");
+    closeStake();
+
+    // Refresh info
+    loadInfo();
+    loadBalances();
+
+  } catch (err) {
+    console.error(err);
+    alert("Stake failed: " + err.message);
+  }
+}
+    
+
+    //////////////////////////
+
 // 👇 yahan se new functions for bottom menu
 function openRefer() {
   alert("Refer & Earn clicked!");
 }
+    /*
 
 function openStake() {
   alert("Stake Now clicked!");
-}
+} */
 
 function openHistory() {
   alert("Claim/Withdrawal History clicked!");
