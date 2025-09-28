@@ -103,12 +103,75 @@
     
     /*__________________SECTION 4 : User stake card (dymenic)____________________*/
     
-    /* Container jisme cards show honge */
+    /* Container jisme cards show honge 
 #stakeCards {
   display: grid;
   place-content: center;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
+  padding: 20px;
+}
+
+/* Har stake ka card 
+.card {
+  background: #1e1e2f;
+  color: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Text styling 
+.card p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+/* Buttons 
+.btn, .danger {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+/* Claim button 
+.btn {
+  background: #4cafef;
+  color: white;
+}
+
+.btn:hover {
+  background: #2196f3;
+}
+
+/* Withdraw button 
+.danger {
+  background: #f44336;
+  color: white;
+}
+
+.danger:hover {
+  background: #d32f2f;
+}
+
+    /* Container jisme cards center me show honge */
+#stakeCards {
+  display: flex;
+  flex-direction: column;   /* ek ke neeche ek */
+  align-items: center;      /* horizontal center */
+  gap: 20px;                /* cards ke beech gap */
   padding: 20px;
 }
 
@@ -118,6 +181,8 @@
   color: #fff;
   border-radius: 15px;
   padding: 20px;
+  width: 90%;              /* screen ke hisaab se adjust hoga */
+  max-width: 450px;        /* ek fixed max width taaki bada na ho */
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -165,6 +230,7 @@
 .danger:hover {
   background: #d32f2f;
 }
+    
 
         /*__________________SECTION 5 : Total stake count_____________________*/
 
