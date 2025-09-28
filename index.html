@@ -185,6 +185,13 @@
       flex: 1;
       margin: 0 5px;
     }
+    .card .end-date {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+    }
+    
     
     .token-name {
   margin-left: 4px;
@@ -372,7 +379,6 @@ async function loadInfo() {
         <h3 class="card-title">Stake #${i}</h3>
         <p><b>Staked Amount:</b> ${ethers.utils.formatEther(amount)} Navaa</p>
         <p><b>Start Date:</b> ${startDate.toLocaleString()}</p>
-        <p><b>End Date:</b> <span id="end-${i}"></span></p>
         <p><b>Total Reward:</b> ${ethers.utils.formatEther(totalReward)} Navaa</p>
         <p><b>Pending Reward:</b>
           <span id="pending-${i}">${ethers.utils.formatEther(pending)}</span> 
@@ -382,6 +388,7 @@ async function loadInfo() {
           <button class="btn claimBtn" data-index="${i}">Claim Reward</button>
           <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal</button>
         </div>
+        <p><b>End Date:</b> <span id="end-${i}"></span></p>
       `;
       stakeCardsContainer.appendChild(card);
 
