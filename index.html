@@ -300,9 +300,9 @@ async function loadInfo() {
       card.className = "card";
       card.innerHTML = `
         <h3 class="card-title">Stake #${i}</h3>
-        <p><b>Staked Amount:</b> ${ethers.utils.formatEther(amount)} tokens</p>
+        <p><b>Staked Amount:</b> ${ethers.utils.formatEther(amount)} Navaa</p>
         <p><b>Start Date:</b> ${startDate.toLocaleString()}</p>
-        <p><b>Total Reward:</b> ${ethers.utils.formatEther(totalReward)} tokens</p>
+        <p><b>Total Reward:</b> ${ethers.utils.formatEther(totalReward)} Navaa</p>
         <p><b>Pending Reward:</b>
         <span id="pending-${i}">${ethers.utils.formatEther(pending)}</span> 
         <span class="token-name">Navaa</span>
