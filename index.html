@@ -284,7 +284,7 @@ async function connectWallet() {
   loadInfo();
 }  
 
-    /*__________________Extra_________________*/
+    /*__________________Extra_________________*
 
 async function loadInfo() {
   try {
@@ -344,7 +344,82 @@ async function loadInfo() {
     console.error(err);
     alert("Error loading info: " + err.message);
   }
+}  */
+
+    async function loadInfo() {
+  try {
+    const count = await contract.stakeCount(userAddress);
+    document.getElementById("stakeCount").innerText = count.toString();
+
+    const stakeCardsContainer = document.getElementById("stakeCards");
+    stakeCardsContainer.innerHTML = ""; // purane cards clear karo
+
+    for (let i = 0; i < count; i++) {
+      const pending = await contract.pendingRewardForStake(userAddress, i);
+      const stakeInfo = await contract.getStake(userAddress, i);
+
+      const amount = stakeInfo.amount;  
+      const startDate = new Date(stakeInfo.startTime.toNumber() * 1000);
+      const totalReward = stakeInfo.totalReward;
+
+      // 🔹 End Date calculate karo (1700 din ka duration)
+      const STAKE_DURATION = 1700 * 24 * 60 * 60; 
+      const endTime = new Date((stakeInfo.startTime.toNumber() + STAKE_DURATION) * 1000);
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3 class="card-title">Stake #${i}</h3>
+        <p><b>Staked Amount:</b> ${ethers.utils.formatEther(amount)} Navaa</p>
+        <p><b>Start Date:</b> ${startDate.toLocaleString()}</p>
+        <p><b>End Date:</b> <span id="end-${i}"></span></p>
+        <p><b>Total Reward:</b> ${ethers.utils.formatEther(totalReward)} Navaa</p>
+        <p><b>Pending Reward:</b>
+          <span id="pending-${i}">${ethers.utils.formatEther(pending)}</span> 
+          <span class="token-name">Navaa</span>
+        </p>
+        <div class="card-actions">
+          <button class="btn claimBtn" data-index="${i}">Claim Reward</button>
+          <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal</button>
+        </div>
+      `;
+      stakeCardsContainer.appendChild(card);
+
+      // 🔄 Pending Reward ko live update karna
+      let pendingLive = parseFloat(ethers.utils.formatEther(pending));
+      const totalRewardNum = parseFloat(ethers.utils.formatEther(totalReward));
+      const rewardRatePerSecond = totalRewardNum / STAKE_DURATION;
+
+      setInterval(() => {
+        pendingLive += rewardRatePerSecond;
+        document.getElementById(`pending-${i}`).innerText = pendingLive.toFixed(6);
+      }, 1000);
+
+      // 🔄 End Date ko live update karna
+      function updateEndTime() {
+        document.getElementById(`end-${i}`).innerText = endTime.toLocaleString();
+      }
+      updateEndTime(); // pehli baar
+      setInterval(updateEndTime, 1000); // har second update
+    }
+
+    // ✅ Buttons activate karo
+    document.querySelectorAll(".claimBtn").forEach(btn => {
+      btn.onclick = () => claimReward(btn.dataset.index);
+    });
+
+    document.querySelectorAll(".withdrawBtn").forEach(btn => {
+      btn.onclick = () => withdrawPrincipal(btn.dataset.index);
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Error loading info: " + err.message);
+  }
 }
+
+
+    
     ///////////////////////////////////////
     async function claimReward(index) {
   try {
