@@ -104,7 +104,10 @@
     /*__________________SECTION 4 : Total stake count_____________________*/
     /* Container jisme cards show honge */
 #stakeCards {
-  display: grid;
+  /* display: grid;   */ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   padding: 20px;
@@ -188,10 +191,8 @@
         <div class="stake-text">Total Stake:</div> 
         <div class="stake-no" id="stakeCount">-</div>
       </div>
-    <!----Section 4 : User Stake Cards (dynamic) ------EXTRA----> 
+    <!----Section 4 : User Stake Cards (dynamic) ------EXTRA---->
 <div id="stakeCards"></div>
-    
-  
   
 <!---------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
