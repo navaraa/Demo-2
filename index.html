@@ -100,6 +100,32 @@
     .total-stake {
       gap: 20px
     }
+    .wallet-balances {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.token-balance {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.token-balance img {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
     
     /*__________________SECTION 4 : User stake card (dymenic)____________________*/
 
@@ -221,6 +247,9 @@
       <div class="wallet-info">
         <div class="w-add" id="wallet">"Not Connected"</div>
       </div>
+      <!-- Wallet balances section -->
+<div class="wallet-balances" id="walletBalances"></div>
+      
     </div>
     <!----Section 3 : Total stake count ------>
       <div class="total-stake">
@@ -235,7 +264,17 @@
 <!---------------------J A V A S C R I P T-----S T A R T------------------------------->
   <script>
     const CONTRACT_ADDRESS = "0x9fd473975cecd4587d78eb71f4498dde778c4b83";
+    // ✅ Navaa token address (apna asli address daalna yahan)
+const NAVAA_TOKEN = "0x23b7a4c2ec9d742b5b1698149e812ca1e10d3e73";
 
+// ✅ ERC20 ke liye chhota ABI
+const TOKEN_ABI = [
+  "function balanceOf(address account) view returns (uint256)",
+  "function decimals() view returns (uint8)"
+];
+//////////////////////////////
+
+    
     const ABI = [
   "function stakeCount(address user) view returns (uint256)",
   "function pendingRewardForStake(address user, uint256 index) view returns (uint256)",
@@ -289,6 +328,7 @@ async function connectWallet() {
   contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
   loadInfo();
+  await loadBalances();
 }  
 
     /*__________________Extra_________________ */
@@ -364,7 +404,35 @@ async function connectWallet() {
     alert("Error loading info: " + err.message);
   }
 }
+////////////extra
+// ✅ Ab yahan neeche ye paste karo
+async function loadBalances() {
+  if (!provider || !userAddress) return;
 
+  // POL balance
+  const polBalance = await provider.getBalance(userAddress);
+  const polFormatted = ethers.utils.formatEther(polBalance);
+
+  // Navaa balance
+  const navaaContract = new ethers.Contract(NAVAA_TOKEN, TOKEN_ABI, provider);
+  const navaaBalance = await navaaContract.balanceOf(userAddress);
+  const navaaDecimals = await navaaContract.decimals();
+  const navaaFormatted = ethers.utils.formatUnits(navaaBalance, navaaDecimals);
+
+  // UI update
+  document.getElementById("walletBalances").innerHTML = `
+    <div class="token-balance">
+      <img src="POL.png" alt="MATIC">
+      ${parseFloat(polFormatted).toFixed(4)} POL
+    </div>
+    <div class="token-balance">
+      <img src="Logo.png" alt="Navaa">
+      ${parseFloat(navaaFormatted).toFixed(4)} Navaa
+    </div>
+  `;
+}
+    
+    
 
     
     ///////////////////////////////////////
