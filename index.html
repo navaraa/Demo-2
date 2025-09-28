@@ -275,6 +275,8 @@ async function connectWallet() {
 
     /*__________________Extra_________________*/
 
+    /*
+
 async function loadInfo() {
   try {
     const count = await contract.stakeCount(userAddress);
@@ -292,7 +294,7 @@ async function loadInfo() {
       const card = document.createElement("div");
       card.className = "card";
 
-      /****extra*****/
+      /****extra*****
 
       card.innerHTML = `
   <h3 class="card-title">Stake #${i}</h3>
@@ -303,14 +305,6 @@ async function loadInfo() {
     <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal</button>
   </div>
 `;
-
-      /*
-      card.innerHTML = `
-      <p><b>Staked Amount (stake #${i}):</b> ${ethers.utils.formatEther(amount)} tokens</p>
-        <p><b>Pending Reward (stake #${i}):</b> ${ethers.utils.formatEther(pending)} tokens</p>
-        <button class="btn claimBtn" data-index="${i}">Claim Reward (Stake #${i})</button><br/>
-        <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal (Stake #${i})</button>
-      `;  */
 
       stakeCardsContainer.appendChild(card);
     }
@@ -328,7 +322,71 @@ async function loadInfo() {
     console.error(err);
     alert("Error loading info: " + err.message);
   }
+}  */
+
+async function loadInfo() {
+  try {
+    const count = await contract.stakeCount(userAddress);
+    document.getElementById("stakeCount").innerText = count.toString();
+
+    const stakeCardsContainer = document.getElementById("stakeCards");
+    stakeCardsContainer.innerHTML = ""; // purane cards clear karo
+
+    for (let i = 0; i < count; i++) {
+      const pending = await contract.pendingRewardForStake(userAddress, i);
+      const stakeInfo = await contract.getStake(userAddress, i);
+
+      const amount = stakeInfo.amount;  
+      const startDate = new Date(stakeInfo.startTime.toNumber() * 1000);
+      const totalReward = stakeInfo.totalReward;
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3 class="card-title">Stake #${i}</h3>
+        <p><b>Staked Amount:</b> ${ethers.utils.formatEther(amount)} tokens</p>
+        <p><b>Start Date:</b> ${startDate.toLocaleString()}</p>
+        <p><b>Total Reward:</b> ${ethers.utils.formatEther(totalReward)} tokens</p>
+        <p><b>Pending Reward:</b> <span id="pending-${i}">${ethers.utils.formatEther(pending)} tokens</span></p>
+        <div class="card-actions">
+          <button class="btn claimBtn" data-index="${i}">Claim Reward</button>
+          <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal</button>
+        </div>
+      `;
+      stakeCardsContainer.appendChild(card);
+
+      // 🔄 Live update for Pending Reward
+      let pendingLive = parseFloat(ethers.utils.formatEther(pending));
+      const totalRewardNum = parseFloat(ethers.utils.formatEther(totalReward));
+
+      // Example: maan lo fixed duration 30 din (apne contract ke hisaab se adjust karna)
+      const duration = 30 * 24 * 60 * 60; 
+      const rewardRatePerSecond = totalRewardNum / duration;
+
+      setInterval(() => {
+        pendingLive += rewardRatePerSecond;
+        document.getElementById(`pending-${i}`).innerText = pendingLive.toFixed(6) + " tokens";
+      }, 1000);
+    }
+
+    // Buttons ko activate karo
+    document.querySelectorAll(".claimBtn").forEach(btn => {
+      btn.onclick = () => claimReward(btn.dataset.index);
+    });
+
+    document.querySelectorAll(".withdrawBtn").forEach(btn => {
+      btn.onclick = () => withdrawPrincipal(btn.dataset.index);
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Error loading info: " + err.message);
+  }
 }
+
+    
+
+    ///////////////////////////////////////
     async function claimReward(index) {
   try {
     const tx = await contract.claimStakingRewards([index]);
@@ -358,8 +416,6 @@ async function withdrawPrincipal(index) {
     
 /*-------------------------------End Extra---------------------*/
     document.getElementById("connectButton").onclick = connectWallet;
-  //  document.getElementById("claimBtn").onclick = claimReward;
-  //  document.getElementById("withdrawBtn").onclick = withdrawPrincipal;
   </script>
 </body>
 </html>
