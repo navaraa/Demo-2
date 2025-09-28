@@ -317,7 +317,6 @@ async function loadInfo() {
           <button class="btn claimBtn" data-index="${i}">Claim Reward</button>
           <button class="danger withdrawBtn" data-index="${i}">Withdraw Principal</button>
         </div>
-        <p><b>End Time:</b> <span id="endtime-${i}"></span></p>
         
       `;
       stakeCardsContainer.appendChild(card);
@@ -329,22 +328,22 @@ async function loadInfo() {
       // Example: maan lo fixed duration 30 din (apne contract ke hisaab se adjust karna)
       const duration = 30 * 24 * 60 * 60; 
       const rewardRatePerSecond = totalRewardNum / duration;
-      const endTimestamp = stakeInfo.startTime.toNumber() + duration; // startTime + duration
+    //  const endTimestamp = stakeInfo.startTime.toNumber() + duration; // startTime + duration
 
 setInterval(() => {
   // pending reward update
   pendingLive += rewardRatePerSecond;
   document.getElementById(`pending-${i}`).innerText = pendingLive.toFixed(6);
 
-  // end time update
-  const now = Math.floor(Date.now() / 1000);
+  // end time update 
+  /*const now = Math.floor(Date.now() / 1000);
   const remaining = endTimestamp - now;
 
   if (remaining > 0) {
     const endDate = new Date(endTimestamp * 1000);
     document.getElementById(`endtime-${i}`).innerText = endDate.toLocaleString();
   } else {
-    document.getElementById(`endtime-${i}`).innerText = "Completed";
+    document.getElementById(`endtime-${i}`).innerText = "Completed"; */
   }
 }, 1000);
       
